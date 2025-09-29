@@ -1,9 +1,11 @@
 package com.project.demo.controller;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.project.demo.dto.UserDTO;
 import com.project.demo.entities.User;
 import com.project.demo.services.UserService;
 
@@ -20,9 +22,9 @@ public class UserController {
     private UserService userService;
     
     @GetMapping
-    public ResponseEntity<List<User>> findAll() {
+    public ResponseEntity<List<UserDTO>> findAll() {
         List<User> list = userService.findAll();
-        return ResponseEntity.ok().body(list);
+        List<UserDTO> listDto = list.stream().map(x -> new UserDTO(x)).collect(Collectors.toList());
+        return ResponseEntity.ok().body(listDto);
     }
-
 }
