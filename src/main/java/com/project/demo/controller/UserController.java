@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.project.demo.dto.UserDTO;
+import com.project.demo.entities.Post;
 import com.project.demo.entities.User;
 import com.project.demo.services.UserService;
 
@@ -43,7 +44,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<?> findById(@RequestBody UserDTO objDto) {
+    public ResponseEntity<?> insert(@RequestBody UserDTO objDto) {
 
         User obj = userService.fromDTO(objDto);
         obj = userService.insert(obj);
@@ -64,5 +65,12 @@ public class UserController {
         obj.setId(id);
         obj = userService.update(obj);
         return ResponseEntity.noContent().build();
+    }
+
+        @GetMapping(value = "/{id}/posts")
+    public ResponseEntity<List<Post>> findPosts(@PathVariable String id) {
+
+        User obj = userService.findById(id);
+        return ResponseEntity.ok().body(obj.getPosts());
     }
 }
